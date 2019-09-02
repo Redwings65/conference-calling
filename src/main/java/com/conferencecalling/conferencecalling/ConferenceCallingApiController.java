@@ -1,16 +1,10 @@
 package com.conferencecalling.conferencecalling;
 
-import com.twilio.base.ResourceSet;
-import com.twilio.rest.api.v2010.account.Call;
-import com.twilio.rest.api.v2010.account.Conference;
-import com.twilio.rest.api.v2010.account.conference.Participant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.net.URISyntaxException;
-import com.twilio.rest.api.v2010.account.Conference;
-
 
 @Controller
 @RequestMapping(path="/api")
@@ -64,15 +58,26 @@ public class ConferenceCallingApiController {
     String runStep3() throws URISyntaxException {
         fourDigitCode = twilioService.generateRandom4DigitAndSend();
         twilioService.createConference();
-        return "done";
+        return "finished running step3";
     }
 
-    @GetMapping(path = "/getxml", produces = MediaType.APPLICATION_XML_VALUE)
+    //step3
+    @GetMapping(path = "/step4")
+    public @ResponseBody
+    String runStep4() throws URISyntaxException {
+        fourDigitCode = twilioService.generateRandom4DigitAndSend();
+        twilioService.createConference();
+        return "finshed running step4";
+    }
+
+    @PostMapping(path = "/getxml", produces = MediaType.APPLICATION_XML_VALUE)
     public @ResponseBody
     String getCallToConfXML() {
-        String xml = "<Response>" +
-                "<Dial>" +
-                "<Conference>Conference</Conference>" +
+        String xml =
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                "<Response>" +
+                "<Dial timeLimit = \"300\">" +
+                "<Conference maxParticipants = \"5\">testconference</Conference>" +
                 "</Dial>" +
                 "</Response>";
         return xml;
